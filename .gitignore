@@ -1,6 +1,12 @@
 # Prerequisites
 *.d
-
+.vs
+x64
+*.sln
+Client_game/x64
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
 # Compiled Object files
 *.slo
 *.lo
