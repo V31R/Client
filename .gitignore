@@ -5,6 +5,7 @@ x64
 *.sln
 Client_game/x64
 Client_game/Debug
+Debug
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.user
