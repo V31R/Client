@@ -19,8 +19,8 @@ int main()
     char data[100] = "Hellow World!";
 
     // UDP socket:
-    sf::IpAddress recipient = "127.0.0.1";
-    unsigned short port = 54000;
+    sf::IpAddress recipient = "172.22.111.11";
+    unsigned short port = 9993;
     if (socket.send(data, 100, recipient, port) != sf::Socket::Done)
     {
         shape.setFillColor(sf::Color::Red);
