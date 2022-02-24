@@ -36,16 +36,10 @@ int main()
         shape.setFillColor(sf::Color::Green);
 
     }
-    while (window.isOpen())
-    {
-        
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
+    sf::Thread thread([&]() {
+
         sprintf_s<100>(data, "%f", clock.getElapsedTime().asSeconds());
+
         if (socket.send(data, 100, recipient, port) != sf::Socket::Done)
         {
             shape.setFillColor(sf::Color::Red);
@@ -56,10 +50,35 @@ int main()
 
         }
 
+        });
+
+    // run it
+    thread.launch();
+    while (window.isOpen())
+    {
+        
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+        /*sprintf_s<100>(data, "%f", clock.getElapsedTime().asSeconds());
+        if (socket.send(data, 100, recipient, port) != sf::Socket::Done)
+        {
+            shape.setFillColor(sf::Color::Red);
+        }
+        else {
+
+            shape.setFillColor(sf::Color::Green);
+
+        }*/
+
         window.clear();
         window.draw(shape);
         window.display();
     }
+    thread.terminate();
 
     return 0;
 }
