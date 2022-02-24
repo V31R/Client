@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
+#include <ctime>
 
 int main()
 {
@@ -25,21 +26,15 @@ int main()
    
     sf::Clock clock;
 
-    sprintf_s<100>(data, "%f", clock.getElapsedTime().asSeconds());
-
-    if (socket.send(data, 100, recipient, port) != sf::Socket::Done)
-    {
-        shape.setFillColor(sf::Color::Red);
-    }
-    else {
-
-        shape.setFillColor(sf::Color::Green);
-
-    }
     sf::Thread thread([&]() {
         while (true)
         {
-            sprintf_s<100>(data, "%f", clock.getElapsedTime().asSeconds());
+
+            time_t clientTime;
+
+            time(&clientTime);
+
+            sprintf_s<100>(data, "%lld", clientTime);
 
             if (socket.send(data, 100, recipient, port) != sf::Socket::Done)
             {
