@@ -19,12 +19,8 @@ int main()
     char data[100];
 
     // UDP socket:
-    sf::IpAddress recipient = "172.22.15.218";
-    unsigned short port = 9993;
-   
-    sf::Clock clock;
-
-    sprintf_s<100>(data, "%f", clock.getElapsedTime().asSeconds());
+    sf::IpAddress recipient = "127.0.0.1";
+    unsigned short port = 54000;
     if (socket.send(data, 100, recipient, port) != sf::Socket::Done)
     {
         shape.setFillColor(sf::Color::Red);
