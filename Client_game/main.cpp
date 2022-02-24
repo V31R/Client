@@ -1,6 +1,13 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
 #include <ctime>
+#include "Settings.h"
+
+#define IP "172.22.15.218"
+#ifndef $(VLAD_PC)
+#undef IP
+#define IP "172.22.111.11"
+#endif
 
 int main()
 {
@@ -8,10 +15,12 @@ int main()
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Yellow);
 
+    Settings settings{ 9993, IP };
+
     sf::UdpSocket socket;
 
     // bind the socket to a port
-    if (socket.bind(9993) != sf::Socket::Done)
+    if (socket.bind(settings.getPort()) != sf::Socket::Done)
     {
         // error...
         shape.setFillColor(sf::Color::Red);
@@ -19,10 +28,7 @@ int main()
 
     char data[100];
 
-    // UDP socket:
-
-    sf::IpAddress recipient = "172.22.15.218";
-    unsigned short port = 9993;
+    printf(IP);
    
     sf::Clock clock;
 
@@ -36,7 +42,7 @@ int main()
 
             sprintf_s<100>(data, "%lld", clientTime);
 
-            if (socket.send(data, 100, recipient, port) != sf::Socket::Done)
+            if (socket.send(data, 100, settings.getIp(), settings.getPort()) != sf::Socket::Done)
             {
                 shape.setFillColor(sf::Color::Red);
             }
