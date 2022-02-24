@@ -37,18 +37,21 @@ int main()
 
     }
     sf::Thread thread([&]() {
-
-        sprintf_s<100>(data, "%f", clock.getElapsedTime().asSeconds());
-
-        if (socket.send(data, 100, recipient, port) != sf::Socket::Done)
+        while (true)
         {
-            shape.setFillColor(sf::Color::Red);
-        }
-        else {
+            sprintf_s<100>(data, "%f", clock.getElapsedTime().asSeconds());
 
-            shape.setFillColor(sf::Color::Green);
+            if (socket.send(data, 100, recipient, port) != sf::Socket::Done)
+            {
+                shape.setFillColor(sf::Color::Red);
+            }
+            else {
 
+                shape.setFillColor(sf::Color::Green);
+
+            }
         }
+        
 
         });
 
