@@ -9,7 +9,7 @@ SettingsProfile SettingsProfileLoader::load(){
 
     std::ifstream input{ "app.settings" };
 
-    SettingsProfile result{};
+    SettingsProfile result{ 54000, "127.0.0.1"};
 
     while (!input.eof()) {
 
