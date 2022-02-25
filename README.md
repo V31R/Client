@@ -5,7 +5,7 @@ To run this program correctly at the current moment you have to add `app.setting
 This files must contatins information about port, ip address for UDP socket.
 Tha base structure of file is:
 
-    `<name_of_property>value_of_property</name_of_property>`
+    <name_of_property>value_of_property</name_of_property>
 
 This scheme looks like tags :).
 Available property:
