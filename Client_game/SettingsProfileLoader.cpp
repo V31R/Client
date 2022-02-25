@@ -13,13 +13,13 @@ SettingsProfile SettingsProfileLoader::load(){
 
     while (!input.eof()) {
 
-        char buffer[BUFFER_SIZE];
+        char buffer[BUFFER_SIZE]="";
         input.getline(buffer, BUFFER_SIZE);
 
-        if (!input.eof()) {
+        if (*buffer) {
 
             size_t i{ 0 };
-            while (buffer[i]) {
+            while (i < BUFFER_SIZE && buffer[i]) {
 
                 void * data = nullptr;
 
@@ -116,10 +116,12 @@ void SettingsProfileLoader::switchFileSymbol(char* buffer, size_t& i) {
             else if (currentState == State::END) {
 
                 currentState = State::NOTHING;
-
+                
             }
 
         }
+
+        i++;
 
     }
 
@@ -145,6 +147,8 @@ void SettingsProfileLoader::switchFileSymbol(char* buffer, size_t& i) {
                 throw std::invalid_argument{ "Expected correct field name." };
 
             }
+
+            currentState = State::END;
 
         }
         else if (currentState == State::READ) {
@@ -204,7 +208,7 @@ void SettingsProfileLoader::getProperty(void *& data, char* buffer, size_t& i){
     if (currentProperty != Property::NOTHING && currentState == State::READ) {
 
         std::string value;
-        i++;
+
         while (i < BUFFER_SIZE && buffer[i] != '<') {
 
             value += buffer[i];

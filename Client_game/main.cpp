@@ -3,17 +3,9 @@
 #include <ctime>
 #include "SettingsProfileLoader.h"
 
-#define IP "172.22.15.218"
-#ifndef $(VLAD_PC)
-#undef IP
-#define IP "172.22.111.11"
-#endif
-
 int main(){
 
-    SettingsProfile settings{ 9993, IP };
-
-    auto test{ SettingsProfileLoader::load() };
+    SettingsProfile settingsProfile{ SettingsProfileLoader::load() };
 
     sf::RenderWindow window(sf::VideoMode(200, 200), "Client");
     sf::CircleShape shape(100.f);
@@ -23,15 +15,13 @@ int main(){
     sf::UdpSocket socket;
 
     // bind the socket to a port
-    if (socket.bind(settings.getPort()) != sf::Socket::Done)
+    if (socket.bind(settingsProfile.getPort()) != sf::Socket::Done)
     {
         // error...
         shape.setFillColor(sf::Color::Red);
     }
 
     char data[100];
-
-    printf(IP);
    
     sf::Clock clock;
 
@@ -45,7 +35,7 @@ int main(){
 
             sprintf_s<100>(data, "%lld", clientTime);
 
-            if (socket.send(data, 100, settings.getIp(), settings.getPort()) != sf::Socket::Done)
+            if (socket.send(data, 100, settingsProfile.getIp(), settingsProfile.getPort()) != sf::Socket::Done)
             {
                 shape.setFillColor(sf::Color::Red);
             }
