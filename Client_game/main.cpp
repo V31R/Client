@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
 #include <ctime>
-#include "SettingsProfile.h"
+#include "SettingsProfileLoader.h"
 
 #define IP "172.22.15.218"
 #ifndef $(VLAD_PC)
@@ -16,6 +16,8 @@ int main()
     shape.setFillColor(sf::Color::Yellow);
 
     SettingsProfile settings{ 9993, IP };
+
+    auto test{ SettingsProfileLoader::load() };
 
     sf::UdpSocket socket;
 

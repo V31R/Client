@@ -26,6 +26,7 @@ SettingsProfile SettingsProfileLoader::load(){
                 switchFileSymbol(buffer, i);
                 getProperty(data, buffer, i);
                 setProperty(result, data);
+                switchFileSymbol(buffer, i);
 
                 delete data;
 
@@ -94,10 +95,6 @@ void SettingsProfileLoader::switchFileSymbol(char* buffer, size_t& i) {
 
     }
 
-    std::string value;
-
-
-
     if (i < BUFFER_SIZE && buffer[i] == '>') {
 
         if (currentProperty == Property::NOTHING) {
@@ -122,30 +119,161 @@ void SettingsProfileLoader::switchFileSymbol(char* buffer, size_t& i) {
 
     }
 
+    if (i < BUFFER_SIZE && buffer[i]>' ') {
+
+
+        if (currentState == State::START) {
+
+            currentProperty = getPropertyType(buffer, i);
+
+            if (currentProperty == Property::NOTHING) {
+
+                throw std::invalid_argument{ "Expected correct field name." };
+
+            }
+
+        }else if (currentState == State::END_READ) {
+
+            auto endProperty{ getPropertyType(buffer, i) };
+
+            if (currentProperty != endProperty) {
+
+                throw std::invalid_argument{ "Expected correct field name." };
+
+            }
+
+        }
+        else if (currentState == State::READ) {
+
+            return;
+
+        }
+ 
+
+
+    }
+
+
 
 }
 
-void SettingsProfileLoader::getPropertyType(char* buffer, size_t& i){
+SettingsProfileLoader::Property SettingsProfileLoader::getPropertyType(char* buffer, size_t& i){
 
+    std::string property;
 
+    while (i < BUFFER_SIZE && buffer[i]>' ' && buffer[i] != '>') {
+
+        property += buffer[i];
+
+    }
+
+    return getPropertyType(property);
 
 }
 
 SettingsProfileLoader::Property SettingsProfileLoader::getPropertyType(std::string& property) {
 
-    return Property();
+    Property result{ Property::NOTHING };
+
+    if (property == "port") {
+
+        result = Property::PORT;
+
+    }else if (property == "ip") {
+
+        result = Property::IP;
+
+    }else if (property == "name") {
+
+        result = Property::NAME;
+
+    }
+
+    return result;
 
 }
 
-void SettingsProfileLoader::getProperty(void*& data, char* buffer, size_t& i){
+void SettingsProfileLoader::getProperty(void *& data, char* buffer, size_t& i){
 
 
+    if (currentProperty != Property::NOTHING && currentState == State::READ) {
+
+        std::string value;
+
+        while (i < BUFFER_SIZE && buffer[i] != '<') {
+
+            value+= buffer[i];
+
+        }
+
+        std::istringstream iss{ value };
+
+
+        switch (currentProperty) {
+        case Property::PORT: {
+
+            size_t port;
+            iss >> port;
+            data = new size_t(port);
+
+            break;
+
+        }
+        case Property::IP: {
+
+            std::string ip;
+            iss >> ip;
+            data = new std::string(ip);
+
+            break;
+
+        }
+        case Property::NAME: {
+
+            std::string name;
+            iss >> name;
+            data = new std::string(name);
+
+            break;
+
+        }
+
+        }
+
+    }
 
 }
 
-void SettingsProfileLoader::setProperty(SettingsProfile & settingProfile, void*& data){
+void SettingsProfileLoader::setProperty(SettingsProfile & settingProfile, void* data){
 
+    if (currentProperty != Property::NOTHING && currentState == State::READ) {
+     
+        switch (currentProperty) {
+        case Property::PORT: {
 
+            settingProfile.setPort(*reinterpret_cast<size_t *>(data));
+
+            break;
+
+        }
+        case Property::IP: {
+
+            settingProfile.setIp(*reinterpret_cast< std::string*>(data));
+
+            break;
+
+        }
+        case Property::NAME: {
+
+            settingProfile.setName(*reinterpret_cast<std::string*>(data));
+
+            break;
+
+        }
+
+        }
+
+    }
 
 }
 

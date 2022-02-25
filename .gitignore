@@ -1,6 +1,7 @@
 # Prerequisites
 *.d
 .vs
+*.settings
 x64
 *.sln
 Client_game/x64
