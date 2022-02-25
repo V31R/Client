@@ -1,7 +1,9 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
 #include <ctime>
+
 #include "SettingsProfileLoader.h"
+
 
 int main(){
 
@@ -10,7 +12,6 @@ int main(){
     sf::RenderWindow window(sf::VideoMode(200, 200), "Client");
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Yellow);
-
 
     sf::UdpSocket socket;
 
