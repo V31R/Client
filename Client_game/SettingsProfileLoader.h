@@ -13,8 +13,8 @@ public:
 
 private:
 
-	enum Property { NOTHING, PORT, IP, NAME };
-	enum State { NOTHING, START, READ, END };
+	enum class Property { NOTHING, PORT, IP, NAME };
+	enum class State { NOTHING, START, READ, END, END_READ };
 
 	static void switchFileSymbol(char* buffer, size_t & i);
 	static void getPropertyType(char* buffer, size_t& i);

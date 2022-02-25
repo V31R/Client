@@ -1,10 +1,12 @@
 #include "SettingsProfileLoader.h"
 
+#define BUFFER_SIZE 255
+
 SettingsProfileLoader::Property SettingsProfileLoader::currentProperty{ SettingsProfileLoader::Property::NOTHING };
 SettingsProfileLoader::State SettingsProfileLoader::currentState{ SettingsProfileLoader::State::NOTHING };
 
 SettingsProfile SettingsProfileLoader::load(){
-#define BUFFER_SIZE 255
+
     std::ifstream input{ "app.settings" };
 
     SettingsProfile result{};
@@ -40,7 +42,7 @@ SettingsProfile SettingsProfileLoader::load(){
 
 void SettingsProfileLoader::switchFileSymbol(char* buffer, size_t& i) {
 
-    while (i < BUFFER_SIZE && buffer[i] <= ' ') {
+    while (i < BUFFER_SIZE && buffer[i] <= ' ' && currentState != State::READ) {
 
         i++;
 
@@ -59,7 +61,8 @@ void SettingsProfileLoader::switchFileSymbol(char* buffer, size_t& i) {
 
     if (i < BUFFER_SIZE && buffer[i] == '<') {
 
-        if (currentState == State::START || currentState == State::END) {
+        if (currentState == State::START || currentState == State::END 
+            || currentState == State::END_READ) {
 
             throw std::invalid_argument{"Expected field name but \"<\" was found."};
 
@@ -80,6 +83,8 @@ void SettingsProfileLoader::switchFileSymbol(char* buffer, size_t& i) {
 
     if (i < BUFFER_SIZE && buffer[i] == '/' && currentState == State::END) {
 
+        currentState = State::END_READ;
+
         do {
 
             i++;
@@ -89,10 +94,31 @@ void SettingsProfileLoader::switchFileSymbol(char* buffer, size_t& i) {
 
     }
 
+    std::string value;
+
 
 
     if (i < BUFFER_SIZE && buffer[i] == '>') {
 
+        if (currentProperty == Property::NOTHING) {
+
+            throw std::invalid_argument{ "Expected field name but \">\" was found." };
+
+        }
+        else {
+
+            if (currentState == State::START) {
+
+                currentState = State::READ;
+
+            }
+            else if (currentState == State::END) {
+
+                currentState = State::NOTHING;
+
+            }
+
+        }
 
     }
 
