@@ -21,14 +21,18 @@ SettingsProfile SettingsProfileLoader::load(){
             size_t i{ 0 };
             while (buffer[i]) {
 
-                void * data;
+                void * data = nullptr;
 
                 switchFileSymbol(buffer, i);
                 getProperty(data, buffer, i);
                 setProperty(result, data);
                 switchFileSymbol(buffer, i);
+               
+                if (data) {
 
-                delete data;
+                    delete data;
+
+                }
 
             }
 
@@ -164,6 +168,7 @@ SettingsProfileLoader::Property SettingsProfileLoader::getPropertyType(char* buf
     while (i < BUFFER_SIZE && buffer[i]>' ' && buffer[i] != '>') {
 
         property += buffer[i];
+        i++;
 
     }
 
@@ -199,11 +204,11 @@ void SettingsProfileLoader::getProperty(void *& data, char* buffer, size_t& i){
     if (currentProperty != Property::NOTHING && currentState == State::READ) {
 
         std::string value;
-
+        i++;
         while (i < BUFFER_SIZE && buffer[i] != '<') {
 
-            value+= buffer[i];
-
+            value += buffer[i];
+            i++;
         }
 
         std::istringstream iss{ value };

@@ -9,15 +9,16 @@
 #define IP "172.22.111.11"
 #endif
 
-int main()
-{
-    sf::RenderWindow window(sf::VideoMode(200, 200), "Client");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Yellow);
+int main(){
 
     SettingsProfile settings{ 9993, IP };
 
     auto test{ SettingsProfileLoader::load() };
+
+    sf::RenderWindow window(sf::VideoMode(200, 200), "Client");
+    sf::CircleShape shape(100.f);
+    shape.setFillColor(sf::Color::Yellow);
+
 
     sf::UdpSocket socket;
 
