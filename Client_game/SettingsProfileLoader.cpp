@@ -22,12 +22,19 @@ SettingsProfile SettingsProfileLoader::load(){
             while (i < BUFFER_SIZE && buffer[i]) {
 
                 void * data = nullptr;
+                try {
 
-                switchFileSymbol(buffer, i);
-                getProperty(data, buffer, i);
-                setProperty(result, data);
-                switchFileSymbol(buffer, i);
-               
+                    switchFileSymbol(buffer, i);
+                    getProperty(data, buffer, i);
+                    setProperty(result, data);
+                    switchFileSymbol(buffer, i);
+
+                }
+                catch (...) {
+
+                    throw;
+
+                }
                 if (data) {
 
                     delete data;
