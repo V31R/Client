@@ -11,7 +11,6 @@ SettingsProfile SettingsProfileLoader::load(){
 
     while (!input.eof()) {
 
-        wchar_t symbol;
         char buffer[BUFFER_SIZE];
         input.getline(buffer, BUFFER_SIZE);
 
@@ -39,30 +38,64 @@ SettingsProfile SettingsProfileLoader::load(){
 
 }
 
-void SettingsProfileLoader::switchFileSymbol(char* buffer, size_t& i){
+void SettingsProfileLoader::switchFileSymbol(char* buffer, size_t& i) {
 
-   if (buffer[i] == '<' && State::NOTHING){
+    while (i < BUFFER_SIZE && buffer[i] <= ' ') {
+
+        i++;
+
+    }
+
+    if (i < BUFFER_SIZE && buffer[i] == '<' && currentState == State::NOTHING) {
 
         currentState = State::START;
-        while( buffer[++i] <= ' ' );
-        getPropertyType(buffer, i);
+        do {
 
-   }
-   else if (buffer[i] == '<' && State::READ) {
+            i++;
 
-       currentState = State::END;
-       while (buffer[++i] <= ' ');
+        } while (i < BUFFER_SIZE && buffer[i] <= ' ');
 
-       do {
+    }
 
-           i++;
+    if (i < BUFFER_SIZE && buffer[i] == '<') {
 
-       }
-       while (buffer[i] <= ' ' || buffer[i] =='/');
+        if (currentState == State::START || currentState == State::END) {
 
-       getPropertyType(buffer, i);
+            throw std::invalid_argument{"Expected field name but \"<\" was found."};
 
-   }
+        }
+
+        if (currentState == State::READ) {
+
+            currentState = State::END;
+            do {
+
+                i++;
+
+            } while (i < BUFFER_SIZE && buffer[i] <= ' ');
+
+        }
+
+    }
+
+    if (i < BUFFER_SIZE && buffer[i] == '/' && currentState == State::END) {
+
+        do {
+
+            i++;
+
+        } while (i < BUFFER_SIZE && buffer[i] <= ' ');
+
+
+    }
+
+
+
+    if (i < BUFFER_SIZE && buffer[i] == '>') {
+
+
+    }
+
 
 }
 

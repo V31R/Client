@@ -1,5 +1,6 @@
 #pragma once
 #include "SettingsProfile.h"
+#include <exception>
 #include <fstream>
 #include <sstream>
 
