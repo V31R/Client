@@ -196,6 +196,10 @@ SettingsProfileLoader::Property SettingsProfileLoader::getPropertyType(std::stri
 
         result = Property::NAME;
 
+    }else if (property == "loglevel") {
+
+        result = Property::LOGLEVEL;
+
     }
 
     return result;
@@ -246,6 +250,13 @@ void SettingsProfileLoader::getProperty(void *& data, char* buffer, size_t& i){
             break;
 
         }
+        case Property::LOGLEVEL: {
+            std::string logLevel;
+            iss >> logLevel;
+            data = new std::string(logLevel);
+
+            break;
+        }
 
         }
 
@@ -279,7 +290,13 @@ void SettingsProfileLoader::setProperty(SettingsProfile & settingProfile, void* 
             break;
 
         }
+        case Property::LOGLEVEL: {
 
+            settingProfile.setLogLevel(*reinterpret_cast<std::string*>(data));
+
+            break;
+
+        }
         }
 
     }
