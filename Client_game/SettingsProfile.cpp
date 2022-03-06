@@ -19,6 +19,12 @@ SettingsProfile::SettingsProfile(size_t port, const sf::IpAddress& ip, const std
 
 {}
 
+SettingsProfile::SettingsProfile(size_t port, const sf::IpAddress& ip, Logger::logLevel logLevel):
+
+    Settings{port, ip, logLevel}
+
+{}
+
 void SettingsProfile::setName(const std::string& name){
 
     name_ = name;

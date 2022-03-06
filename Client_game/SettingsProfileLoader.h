@@ -13,7 +13,7 @@ public:
 
 private:
 
-	enum class Property { NOTHING, PORT, IP, NAME, LOGLEVEL };
+	enum class Property { NOTHING, PORT, IP, NAME, LOG_LEVEL };
 	enum class State { NOTHING, START, READ, END, END_READ };
 
 	static void switchFileSymbol(char* buffer, size_t & i);

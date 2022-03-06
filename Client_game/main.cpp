@@ -2,11 +2,11 @@
 #include <SFML/Network.hpp>
 #include <ctime>
 
+
 #include "SettingsProfileLoader.h"
 
 
 int main(){
-
     SettingsProfile settingsProfile{ SettingsProfileLoader::load() };
     sf::RenderWindow window(sf::VideoMode(200, 200), "Client");
     sf::CircleShape shape(100.f);

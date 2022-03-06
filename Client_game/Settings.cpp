@@ -10,6 +10,13 @@ Settings::Settings(size_t port, const sf::IpAddress& ip):
 
 {}
 
+Settings::Settings(size_t port, const sf::IpAddress& ip, Logger::logLevel logLevel):
+	port_{ port },
+	ip_{ ip },
+	logLevel_{ logLevel}
+
+{}
+
 void Settings::setPort(size_t port){
 
 	port_ = port;
@@ -22,10 +29,11 @@ void Settings::setIp(const sf::IpAddress& ip){
 
 }
 
-void Settings::setLogLevel(std::string logLevel)
-{
+void Settings::setLogLevel(Logger::logLevel logLevel){
 	logLevel_ = logLevel;
 }
+
+
 
 size_t Settings::getPort(){
 
@@ -39,7 +47,11 @@ sf::IpAddress Settings::getIp(){
 
 }
 
-std::string Settings::getLogLevel()
-{
+Logger::logLevel Settings::getLogLevel(){
+
 	return logLevel_;
 }
+
+
+
+
