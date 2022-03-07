@@ -26,15 +26,8 @@ public:
 
 	void setLevel(logLevel level);
 
-	const std::map<logLevel, std::string> strLog
-	{
-		{Logger::logLevel::WARN, " [WARN] "}, 
-		{Logger::logLevel::ERROR, " [ERROR] "}, 
-		{Logger::logLevel::TRACE, " [TRACE] "},  
-		{Logger::logLevel::DEBUG, " [DEBUG] "}, 
-		{Logger::logLevel::INFO, " [INFO] "}, 
-		{Logger::logLevel::ALL, " [ALL] "},
-	};
+	static std::map<logLevel, std::string> strLog;
+	
 
 private:
 

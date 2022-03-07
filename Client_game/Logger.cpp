@@ -1,9 +1,20 @@
 #include "Logger.h"
 
+std::map<Logger::logLevel, std::string> Logger::strLog{
+
+        {Logger::logLevel::WARN, "WARN"},
+        {Logger::logLevel::ERROR, "ERROR"},
+        {Logger::logLevel::TRACE, "TRACE"},
+        {Logger::logLevel::DEBUG, "DEBUG"},
+        {Logger::logLevel::INFO, "INFO"},
+        {Logger::logLevel::ALL, "ALL"},
+
+};
+
 Logger* Logger::getInstance() {
 
-    static Logger res;
-    return &res;
+    static Logger result;
+    return &result;
 
 }
 
@@ -12,30 +23,19 @@ Logger::logLevel Logger::getLogLevelFromStr(std::string level){
     std::string str;
     std::transform(level.begin(), level.end(), std::back_inserter(str), toupper);
 
-    logLevel res;
-    if (str == "WARN") {
-        res = logLevel::WARN;
-    }
-    else if (str == "ERROR") {
-        res = logLevel::ERROR;
-    }
-    else if (str == "TRACE") {
-        res = logLevel::TRACE;
-    }
-    else if (str == "DEBUG") {
-        res = logLevel::DEBUG;
-    }
-    else if (str == "INFO") {
-        res = logLevel::INFO;
-    }
-    else if (str == "ALL") {
-        res = logLevel::ALL;
-    }
-    else {
-        throw str + "- This level of logging does not exist";
-    }
     
-    return res;
+    for (auto level : strLog) {
+
+        if (str == level.second) {
+
+            return level.first;
+
+        }
+
+    }
+
+    throw str + "- This level of logging does not exist";
+
 }
 
 void Logger::log(std::string message, logLevel level) {
@@ -43,7 +43,9 @@ void Logger::log(std::string message, logLevel level) {
     std::ofstream file(filename,std::ios_base::app);
     std::string output;
     output.append(timestamp());
+    output.append(" [");
     output.append(strLog.find(level)->second);
+    output.append("] ");
     output.append(message);
     output.push_back('\n');
     file << output;
