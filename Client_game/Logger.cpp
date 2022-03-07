@@ -61,11 +61,18 @@ std::string Logger::timestamp() {
     std::chrono::duration<double> fractional_seconds =
         (tp - std::chrono::system_clock::from_time_t(tt)) + std::chrono::seconds(gmt.tm_sec);
     
-    std::string buffer("year/mo/dy hr:mn:sc.xxxxxx");
+    //std::string buffer("year/mo/dy hr:mn:sc.xx");
+    std::string buffer("dy/mo/year hr:mn:sc.xx");
+
+    //auto const time = std::chrono::current_zone()
+        //->to_local(std::chrono::system_clock::now());
+
+    //sprintf(&buffer.front(), "%04d/%02d/%02d %02d:%02d:%09.2f", gmt.tm_year + 1900, gmt.tm_mon + 1,
+       // gmt.tm_mday, gmt.tm_hour+3, gmt.tm_min, fractional_seconds.count());
 #pragma warning(suppress : 4996)
-    sprintf(&buffer.front(), "%04d/%02d/%02d %02d:%02d:%09.6f", gmt.tm_year + 1900, gmt.tm_mon + 1,
-        gmt.tm_mday, gmt.tm_hour, gmt.tm_min, fractional_seconds.count());
-    
+    sprintf(&buffer.front(), "%02d/%02d/%04d %02d:%02d:%05.2f", gmt.tm_mday, gmt.tm_mon + 1,
+    gmt.tm_year + 1900, gmt.tm_hour + 3, gmt.tm_min, fractional_seconds.count());
+
     return buffer;
 }
 

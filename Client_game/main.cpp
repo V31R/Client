@@ -11,6 +11,15 @@ int main(){
     shape.setFillColor(sf::Color::Yellow);
 
 
+    Logger::getInstance()->setLevel(settingsProfile.getLogLevel());
+
+    Logger::getInstance()->warn("AAA");
+    Logger::getInstance()->error("BBB");
+    Logger::getInstance()->info("CCC");
+    Logger::getInstance()->debug("DDD");
+    Logger::getInstance()->trace("FFF");
+    Logger::getInstance()->all("AAA");
+
     sf::UdpSocket socket;
 
     // bind the socket to a port
