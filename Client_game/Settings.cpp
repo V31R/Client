@@ -30,7 +30,9 @@ void Settings::setIp(const sf::IpAddress& ip){
 }
 
 void Settings::setLogLevel(Logger::logLevel logLevel){
+
 	logLevel_ = logLevel;
+
 }
 
 

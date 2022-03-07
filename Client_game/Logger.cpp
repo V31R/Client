@@ -1,9 +1,10 @@
 #include "Logger.h"
 
-Logger* Logger::getInstance(){
+Logger* Logger::getInstance() {
 
     static Logger res;
     return &res;
+
 }
 
 Logger::logLevel Logger::getLogLevelFromStr(std::string level){
@@ -64,4 +65,72 @@ std::string Logger::timestamp() {
         gmt.tm_mday, gmt.tm_hour, gmt.tm_min, fractional_seconds.count());
     
     return buffer;
+}
+
+void Logger::warn(std::string message) {
+
+    if (logLevel::WARN <= level_) {
+
+        log(message, logLevel::WARN);
+       
+    }
+    
+}
+
+
+
+void Logger::error(std::string message) {
+
+    if (logLevel::ERROR <= level_) {
+
+        log(message, logLevel::ERROR);
+
+    }
+
+}
+
+void Logger::info(std::string message) {
+
+    if (logLevel::INFO <= level_) {
+
+        log(message, logLevel::INFO);
+
+    }
+
+}
+
+void Logger::debug(std::string message) {
+
+    if (logLevel::DEBUG <= level_) {
+
+        log(message, logLevel::DEBUG);
+
+    }
+
+}
+
+void Logger::trace(std::string message) {
+
+    if (logLevel::TRACE <= level_) {
+
+        log(message, logLevel::TRACE);
+
+    }
+
+}
+
+void Logger::all(std::string message) {
+
+    if (logLevel::ALL <= level_) {
+
+        log(message, logLevel::ALL);
+
+    }
+
+}
+
+void Logger::setLevel(logLevel level){
+
+    level_ = level;
+
 }
