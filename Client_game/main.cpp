@@ -5,20 +5,16 @@
 
 
 int main(){
+
     SettingsProfile settingsProfile{ SettingsProfileLoader::load() };
+
+    Logger::getInstance()->setLevel(settingsProfile.getLogLevel());
+    Logger::getInstance()->info("Settings were load successfully");
+
     sf::RenderWindow window(sf::VideoMode(200, 200), "Client");
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Yellow);
 
-
-    Logger::getInstance()->setLevel(settingsProfile.getLogLevel());
-
-    Logger::getInstance()->warn("AAA");
-    Logger::getInstance()->error("BBB");
-    Logger::getInstance()->info("CCC");
-    Logger::getInstance()->debug("DDD");
-    Logger::getInstance()->trace("FFF");
-    Logger::getInstance()->all("AAA");
 
     sf::UdpSocket socket;
 
@@ -27,6 +23,7 @@ int main(){
     {
         // error...
         shape.setFillColor(sf::Color::Red);
+
     }
 
     char data[100];

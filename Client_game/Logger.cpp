@@ -1,13 +1,13 @@
 #include "Logger.h"
 
-std::map<Logger::logLevel, std::string> Logger::strLog{
+std::map<Logger::LogLevel, std::string> Logger::strLog{
 
-        {Logger::logLevel::WARN, "WARN"},
-        {Logger::logLevel::ERROR, "ERROR"},
-        {Logger::logLevel::TRACE, "TRACE"},
-        {Logger::logLevel::DEBUG, "DEBUG"},
-        {Logger::logLevel::INFO, "INFO"},
-        {Logger::logLevel::ALL, "ALL"},
+        {Logger::LogLevel::WARN, "WARN"},
+        {Logger::LogLevel::ERROR, "ERROR"},
+        {Logger::LogLevel::TRACE, "TRACE"},
+        {Logger::LogLevel::DEBUG, "DEBUG"},
+        {Logger::LogLevel::INFO, "INFO"},
+        {Logger::LogLevel::ALL, "ALL"},
 
 };
 
@@ -18,7 +18,7 @@ Logger* Logger::getInstance() {
 
 }
 
-Logger::logLevel Logger::getLogLevelFromStr(std::string level){
+Logger::LogLevel Logger::getLogLevelFromStr(std::string level){
 
     std::string str;
     std::transform(level.begin(), level.end(), std::back_inserter(str), toupper);
@@ -38,9 +38,9 @@ Logger::logLevel Logger::getLogLevelFromStr(std::string level){
 
 }
 
-void Logger::log(std::string message, logLevel level) {
+void Logger::log(std::string message, LogLevel level) {
 
-    std::ofstream file(filename,std::ios_base::app);
+    std::ofstream file(filename, std::fstream::out | std::fstream::app);
     std::string output;
     output.append(timestamp());
     output.append(" [");
@@ -54,33 +54,20 @@ void Logger::log(std::string message, logLevel level) {
 }
 
 std::string Logger::timestamp() {
-    
-    std::chrono::system_clock::time_point tp = std::chrono::system_clock::now();
-    std::time_t tt = std::chrono::system_clock::to_time_t(tp);
-    std::tm gmt{}; gmtime_s(&gmt, &tt);
-    std::chrono::duration<double> fractional_seconds =
-        (tp - std::chrono::system_clock::from_time_t(tt)) + std::chrono::seconds(gmt.tm_sec);
-    
-    //std::string buffer("year/mo/dy hr:mn:sc.xx");
-    std::string buffer("dy/mo/year hr:mn:sc.xx");
 
-    //auto const time = std::chrono::current_zone()
-        //->to_local(std::chrono::system_clock::now());
+    const auto& timeZoneDatabase = std::chrono::get_tzdb();
+    const auto& currentZone = timeZoneDatabase.current_zone();
+    const std::chrono::zoned_time zt{ currentZone->name(), std::chrono::system_clock::now()};
 
-    //sprintf(&buffer.front(), "%04d/%02d/%02d %02d:%02d:%09.2f", gmt.tm_year + 1900, gmt.tm_mon + 1,
-       // gmt.tm_mday, gmt.tm_hour+3, gmt.tm_min, fractional_seconds.count());
-#pragma warning(suppress : 4996)
-    sprintf(&buffer.front(), "%02d/%02d/%04d %02d:%02d:%05.2f", gmt.tm_mday, gmt.tm_mon + 1,
-    gmt.tm_year + 1900, gmt.tm_hour + 3, gmt.tm_min, fractional_seconds.count());
+    return std::format("{:%Y-%m-%d %H:%M:%OS}", zt);
 
-    return buffer;
 }
 
 void Logger::warn(std::string message) {
 
-    if (logLevel::WARN <= level_) {
+    if (LogLevel::WARN <= level_) {
 
-        log(message, logLevel::WARN);
+        log(message, LogLevel::WARN);
        
     }
     
@@ -90,9 +77,9 @@ void Logger::warn(std::string message) {
 
 void Logger::error(std::string message) {
 
-    if (logLevel::ERROR <= level_) {
+    if (LogLevel::ERROR <= level_) {
 
-        log(message, logLevel::ERROR);
+        log(message, LogLevel::ERROR);
 
     }
 
@@ -100,9 +87,9 @@ void Logger::error(std::string message) {
 
 void Logger::info(std::string message) {
 
-    if (logLevel::INFO <= level_) {
+    if (LogLevel::INFO <= level_) {
 
-        log(message, logLevel::INFO);
+        log(message, LogLevel::INFO);
 
     }
 
@@ -110,9 +97,9 @@ void Logger::info(std::string message) {
 
 void Logger::debug(std::string message) {
 
-    if (logLevel::DEBUG <= level_) {
+    if (LogLevel::DEBUG <= level_) {
 
-        log(message, logLevel::DEBUG);
+        log(message, LogLevel::DEBUG);
 
     }
 
@@ -120,9 +107,9 @@ void Logger::debug(std::string message) {
 
 void Logger::trace(std::string message) {
 
-    if (logLevel::TRACE <= level_) {
+    if (LogLevel::TRACE <= level_) {
 
-        log(message, logLevel::TRACE);
+        log(message, LogLevel::TRACE);
 
     }
 
@@ -130,15 +117,15 @@ void Logger::trace(std::string message) {
 
 void Logger::all(std::string message) {
 
-    if (logLevel::ALL <= level_) {
+    if (LogLevel::ALL <= level_) {
 
-        log(message, logLevel::ALL);
+        log(message, LogLevel::ALL);
 
     }
 
 }
 
-void Logger::setLevel(logLevel level){
+void Logger::setLevel(LogLevel level){
 
     level_ = level;
 

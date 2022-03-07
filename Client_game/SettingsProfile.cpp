@@ -19,7 +19,7 @@ SettingsProfile::SettingsProfile(size_t port, const sf::IpAddress& ip, const std
 
 {}
 
-SettingsProfile::SettingsProfile(size_t port, const sf::IpAddress& ip, Logger::logLevel logLevel):
+SettingsProfile::SettingsProfile(size_t port, const sf::IpAddress& ip, Logger::LogLevel logLevel):
 
     Settings{port, ip, logLevel}
 

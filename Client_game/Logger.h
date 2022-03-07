@@ -6,15 +6,18 @@
 #include <iterator>
 #include <cctype>
 #include <chrono>
-#include <ctime>
+#include <sstream>
+#include <iostream>
+#include<format>
+//#include <ctime>
 
 class Logger {
 public: 
 
-	enum class logLevel { WARN, ERROR, INFO, DEBUG, TRACE, ALL };
+	enum class LogLevel { WARN, ERROR, INFO, DEBUG, TRACE, ALL };
 	static Logger* getInstance();
-	static logLevel getLogLevelFromStr(std::string str);
-	void log(std::string message, logLevel level);
+	static LogLevel getLogLevelFromStr(std::string str);
+	void log(std::string message, LogLevel level);
 	std::string timestamp();
 
 	void warn(std::string message);
@@ -24,15 +27,15 @@ public:
 	void trace(std::string message);
 	void all(std::string message);
 
-	void setLevel(logLevel level);
+	void setLevel(LogLevel level);
 
-	static std::map<logLevel, std::string> strLog;
+	static std::map<LogLevel, std::string> strLog;
 	
 
 private:
 
 	Logger() {};
 	std::string filename = "Client_game.log";
-    logLevel level_;
+    LogLevel level_;
 	
 };

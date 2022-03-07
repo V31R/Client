@@ -9,7 +9,7 @@ SettingsProfile SettingsProfileLoader::load(){
 
     std::ifstream input{ "app.settings" };
 
-    SettingsProfile result{ 54000, "127.0.0.1"};
+    SettingsProfile result{ 54000, "127.0.0.1", Logger::LogLevel::ERROR};
 
     while (!input.eof()) {
 
@@ -254,7 +254,7 @@ void SettingsProfileLoader::getProperty(void *& data, char* buffer, size_t& i){
 
             std::string strLogLevel;
             iss >> strLogLevel;
-            data = new Logger::logLevel(Logger::getLogLevelFromStr(strLogLevel));
+            data = new Logger::LogLevel(Logger::getLogLevelFromStr(strLogLevel));
 
             break;
         }
@@ -293,7 +293,7 @@ void SettingsProfileLoader::setProperty(SettingsProfile & settingProfile, void* 
         }
         case Property::LOG_LEVEL: {
 
-            settingProfile.setLogLevel(*reinterpret_cast<Logger::logLevel*>(data));
+            settingProfile.setLogLevel(*reinterpret_cast<Logger::LogLevel*>(data));
 
             break;
 
