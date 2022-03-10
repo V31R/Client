@@ -1,7 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
 #include <ctime>
-
 #include "SettingsProfileLoader.h"
 
 
@@ -9,9 +8,13 @@ int main(){
 
     SettingsProfile settingsProfile{ SettingsProfileLoader::load() };
 
+    Logger::getInstance()->setLevel(settingsProfile.getLogLevel());
+    Logger::getInstance()->info("Settings were load successfully");
+
     sf::RenderWindow window(sf::VideoMode(200, 200), "Client");
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Yellow);
+
 
     sf::UdpSocket socket;
 
@@ -20,6 +23,7 @@ int main(){
     {
         // error...
         shape.setFillColor(sf::Color::Red);
+
     }
 
     char data[100];

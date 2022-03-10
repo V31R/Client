@@ -10,5 +10,6 @@ Tha base structure of file is:
 This scheme looks like tags :).
 Available property:
 - `port` - positive number of port (default value = `54000`)
-- `address` - string with ipv4 address of server (default value = `127.0.0.1`)
+- `IP` - string with IP of server (default value = `127.0.0.1`)
 - `name` - name of current profile settings
+- `log_level` - level of logging (possible values = `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`, `ALL`)
