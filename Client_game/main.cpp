@@ -26,7 +26,7 @@ int main(){
 
     }
 
-    char data[100];
+    char data[272];
    
     sf::Clock clock;
 
@@ -37,10 +37,11 @@ int main(){
             time_t clientTime;
 
             time(&clientTime);
+            memset(data, 0, 8);
+            memcpy(data + 8,&clientTime,sizeof(clientTime));
+            //sprintf_s<264>(data+8, "", clientTime);
 
-            sprintf_s<100>(data, "%lld", clientTime);
-
-            if (socket.send(data, 100, settingsProfile.getIp(), settingsProfile.getPort()) != sf::Socket::Done)
+            if (socket.send(data, 272, settingsProfile.getIp(), settingsProfile.getPort()) != sf::Socket::Done)
             {
                 shape.setFillColor(sf::Color::Red);
             }
