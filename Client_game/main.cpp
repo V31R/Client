@@ -35,10 +35,11 @@ int main(){
         {
 
             time_t clientTime;
-
+            
             time(&clientTime);
+            int64_t dataTime = clientTime;
             memset(data, 0, 8);
-            memcpy(data + 8,&clientTime,sizeof(clientTime));
+            memcpy(data + 8,&dataTime,sizeof(dataTime));
             //sprintf_s<264>(data+8, "", clientTime);
 
             if (socket.send(data, 272, settingsProfile.getIp(), settingsProfile.getPort()) != sf::Socket::Done)
