@@ -54,13 +54,18 @@ void Logger::log(std::string message, LogLevel level) {
 }
 
 std::string Logger::timestamp() {
+    setlocale(LC_ALL, "RUS");
+    try {
+        const auto& timeZoneDatabase = std::chrono::get_tzdb();
+        const auto& currentZone = timeZoneDatabase.current_zone();
+        const std::chrono::zoned_time zt{ currentZone->name(), std::chrono::system_clock::now() };
 
-    const auto& timeZoneDatabase = std::chrono::get_tzdb();
-    const auto& currentZone = timeZoneDatabase.current_zone();
-    const std::chrono::zoned_time zt{ currentZone->name(), std::chrono::system_clock::now()};
-
-    return std::format("{:%Y-%m-%d %H:%M:%OS}", zt);
-
+        return std::format("{:%Y-%m-%d %H:%M:%OS}", zt);
+    }
+    catch (std::exception& a) {
+        std::cout << a.what();
+    }
+    
 }
 
 void Logger::warn(std::string message) {

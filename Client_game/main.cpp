@@ -19,12 +19,23 @@ int main(){
     sf::UdpSocket socket;
 
     // bind the socket to a port
-    if (socket.bind(settingsProfile.getPort()) != sf::Socket::Done)
+    /*if (socket.bind(settingsProfile.getPort()) != sf::Socket::Done)
     {
         // error...
         shape.setFillColor(sf::Color::Red);
 
-    }
+    }*/
+
+    sf::TcpSocket socketTCP;
+    std::cout << socketTCP.connect("127.0.0.1", 5000);
+
+    std::string message = "Hi, I am a client";
+    socketTCP.send(message.c_str(), message.size() + 1);
+
+    char buffer[1024];
+    std::size_t received = 0;
+    socketTCP.receive(buffer, sizeof(buffer), received);
+    std::cout << "The server said: " << buffer << std::endl;
 
     char data[272];
    
@@ -42,7 +53,7 @@ int main(){
             memcpy(data + 8,&dataTime,sizeof(dataTime));
             //sprintf_s<264>(data+8, "", clientTime);
 
-            if (socket.send(data, 272, settingsProfile.getIp(), settingsProfile.getPort()) != sf::Socket::Done)
+            if (socketTCP.send(data, 272) != sf::Socket::Done)
             {
                 shape.setFillColor(sf::Color::Red);
             }
