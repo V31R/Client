@@ -2,9 +2,29 @@
 #include <SFML/Network.hpp>
 #include <ctime>
 #include "SettingsProfileLoader.h"
-#include "nlohmann/json.hpp"
+#include "Logger.h"
+#include <iostream>
+#include <winsock2.h>
+#pragma comment(lib, "WS2_32.lib")
+#pragma warning(disable : 4996)
+
+sf::String getMyIP() {
+    struct hostent* hostName = gethostbyname("");
+    SOCKADDR_IN serverAddress;
+
+    memset(&serverAddress, 0, sizeof(serverAddress));
+    serverAddress.sin_family = AF_INET;
+    serverAddress.sin_addr.S_un.S_addr = *(DWORD*)hostName->h_addr_list[0];
+
+    return sf::String(inet_ntoa(serverAddress.sin_addr));
+}
+
 
 int main(){
+    WSADATA WSAData;
+    if (WSAStartup(0x0202, &WSAData)) {
+        return 1;
+    }
 
     SettingsProfile settingsProfile{ SettingsProfileLoader::load() };
 
@@ -15,47 +35,9 @@ int main(){
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Yellow);
 
-
-    sf::UdpSocket socket;
-
-    // bind the socket to a port
-    if (socket.bind(settingsProfile.getPort()) != sf::Socket::Done)
-    {
-        // error...
-        shape.setFillColor(sf::Color::Red);
-
-    }
-
-    char data[100];
-   
-    sf::Clock clock;
-
-    sf::Thread thread([&]() {
-        while (true)
-        {
-
-            time_t clientTime;
-
-            time(&clientTime);
-
-            sprintf_s<100>(data, "%lld", clientTime);
-
-            if (socket.send(data, 100, settingsProfile.getIp(), settingsProfile.getPort()) != sf::Socket::Done)
-            {
-                shape.setFillColor(sf::Color::Red);
-            }
-            else {
-
-                shape.setFillColor(sf::Color::Green);
-
-            }
-        }
-        
-
-        });
+    std::cout << getMyIP().toAnsiString();
 
     // run it
-    thread.launch();
     while (window.isOpen())
     {
         
@@ -80,7 +62,6 @@ int main(){
         window.draw(shape);
         window.display();
     }
-    thread.terminate();
 
     return 0;
 }
