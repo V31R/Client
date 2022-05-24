@@ -32,13 +32,45 @@ int main(){
     Logger::getInstance()->setLevel(settingsProfile.getLogLevel());
     Logger::getInstance()->info("Settings were load successfully");
 
-    sf::RenderWindow window(sf::VideoMode(200, 200), "Client");
+   
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Yellow);
 
-    std::cout << getMyIP().toAnsiString();
+    sf::String clientIp{ getMyIP() };
+    Logger::getInstance()->info((sf::String("This client ip = ") + clientIp).toAnsiString());
 
+    sf::Http http;
+    std::string baseHost("http://"+settingsProfile.getIp().toString() + ":");
+    {
+        std::ostringstream oss;
+        oss << settingsProfile.getPort();
+        baseHost += oss.str();
+    }
+    baseHost += "/";
+    http.setHost(baseHost);
+    //http.setHost("www.sfml-dev.org/");
+    //http.setHost("http://127.0.0.1:8080/");
+    sf::Http::Request request;
+    request.setMethod(sf::Http::Request::Method::Get);
+    //request.setUri("features.php");
+    //request.setUri("/auth?ip=" + clientIp);
+    request.setHttpVersion(1, 1); // HTTP 1.1
+    //request.setField("From", "me");
+    request.setField("Connection", "keep-alive");
+    request.setField("Accept", "*/*");
+    request.setField("Accept-Encoding", "gzip, deflate, br");
+
+    // fill the request...
+    sf::Http::Response response = http.sendRequest(request);
+    sf::String responseStatus;
+    {
+        std::ostringstream oss;
+        oss << response.getStatus();
+        responseStatus += oss.str();
+    }
+    Logger::getInstance()->info("Request for login with status code = " + responseStatus+" with body\n"+response.getBody());
     // run it
+    sf::RenderWindow window(sf::VideoMode(200, 200), "Client");
     while (window.isOpen())
     {
         
