@@ -2,7 +2,7 @@
 #include <SFML/Network.hpp>
 #include <ctime>
 #include "SettingsProfileLoader.h"
-
+#include "nlohmann/json.hpp"
 
 int main(){
 
