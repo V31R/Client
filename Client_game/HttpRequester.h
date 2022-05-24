@@ -1,12 +1,7 @@
 #pragma once
-#include "nlohmann/json.hpp"
-#include <SFML/Graphics.hpp>
-#include <SFML/Network.hpp>
 
-#include "SettingsProfileLoader.h"
 #include "Logger.h"
-#include <iostream>
-
+#include <sstream>
 #define CURL_STATICLIB
 #include <curl/curl.h>
 #include <string>
