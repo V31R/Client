@@ -8,6 +8,20 @@
 #include "Logger.h"
 #include <iostream>
 
+class Entity {
+public:
+
+    enum Type{ OBJECT, SWORD, SPEAR, BOW, MAGIC };
+
+
+
+private:
+
+    std::string imageName_;
+    int type_;
+
+}; 
+
 int main(){
 
     HttpRequester::getInstance().init();
