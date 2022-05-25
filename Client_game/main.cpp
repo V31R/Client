@@ -10,6 +10,8 @@
 #include "ConnectionLoader.h"
 #include "ConnectionScreen.h"
 #include "ScreenWithLoader.h"
+#include "DataLoadScreen.h"
+#include "DataLoader.h"
 
 class Entity {
 public:
@@ -53,6 +55,26 @@ int main(){
 
         registered = reinterpret_cast<ConnectionLoader*>(loader)->getRegistered();
         if (registered == 2) {
+
+            return 0;
+
+        }
+
+        delete loader;
+        delete screen;
+
+    }
+    int loaded{ 0 };
+    {
+
+        Loader* loader = new DataLoader;
+        Screen* screen = new DataLoadScreen;
+
+        ScreenWithLoader dataLoad(screen, loader);
+        dataLoad.run(window);
+
+        loaded = reinterpret_cast<DataLoader*>(loader)->getLoaded();
+        if (loaded == 0) {
 
             return 0;
 
