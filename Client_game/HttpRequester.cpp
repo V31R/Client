@@ -97,7 +97,7 @@ std::pair<std::string, int> HttpRequester::GETrequest(const std::string& host, c
     }
     else {
 
-        std::string success{ "Request to " + url + " successfull, code: " };
+        std::string success{ "GET request to " + url + " successfull, code: " };
         std::ostringstream oss;
         oss << responseCode;
         Logger::getInstance()->info(success + oss.str());
@@ -106,5 +106,54 @@ std::pair<std::string, int> HttpRequester::GETrequest(const std::string& host, c
 
     }
     
+}
+
+std::pair<std::string, int> HttpRequester::POSTrequest(const std::string& host, const std::string& URI){
+
+    std::string result;
+    CURL* curl_ = curl_easy_init();
+    if (!curl_) {
+
+        Logger::getInstance()->error("CURL init error");
+        return { result, -1 };
+
+    }
+
+    std::string url{ host + URI };
+    Logger::getInstance()->info("Make POST request to " + url);
+    curl_easy_setopt(curl_, CURLOPT_URL, url.c_str());
+    //curl_easy_setopt(curl_, CURLOPT_WRITEFUNCTION, &HttpRequester::my_write);
+    //curl_easy_setopt(curl_, CURLOPT_WRITEDATA, &result);
+    curl_easy_setopt(curl_, CURLOPT_POSTFIELDS, "");
+    curl_easy_setopt(curl_, CURLOPT_POST, 1L);
+
+    lastErrorCode_ = curl_easy_perform(curl_);
+    long int responseCode;
+    curl_easy_getinfo(curl_, CURLINFO_RESPONSE_CODE, &responseCode);
+    curl_easy_cleanup(curl_);
+    if (CURLE_OK != lastErrorCode_) {
+
+        std::string error{ "CURL error: " };
+        std::ostringstream oss;
+        oss << lastErrorCode_;
+        error += oss.str();
+
+        Logger::getInstance()->error(error);
+
+        return { result, lastErrorCode_ };
+
+    }
+    else {
+
+        std::string success{ "POST request to " + url + " successfull, code: " };
+        std::ostringstream oss;
+        oss << responseCode;
+        Logger::getInstance()->info(success + oss.str());
+
+        return { result, responseCode };
+
+    }
+
+
 }
 

@@ -171,10 +171,16 @@ void Button::setText(std::string str){
 void Button::setTextSize(unsigned int size){
 
 	text_.setCharacterSize(size);
+
+	sf::Vector2f s(getShape().getGlobalBounds().width, getShape().getGlobalBounds().height);
+	sf::Vector2f ts(text_.getGlobalBounds().width, text_.getGlobalBounds().height);
+	sf::Vector2f offset{ (s - ts)/2.f };
+
 	text_.setPosition(
-		(getShape().getPosition().x + getShape().getGlobalBounds().width / 2) - (text_.getGlobalBounds().width / 2),
-		(getShape().getPosition().y + getShape().getGlobalBounds().height / 2) - (text_.getGlobalBounds().height / 2)
+		this->getPosition().x + offset.x,
+		this->getPosition().y + offset.y/2
 	);
+
 
 }
 

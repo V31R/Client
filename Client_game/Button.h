@@ -53,11 +53,13 @@ public:
 		font_ = font;
 		text_.setFont(*this->font_);
 		text_.setString(text);
-		text_.setFillColor(sf::Color::Black);
+		text_.setFillColor(sf::Color::White);
+		text_.setOutlineColor(sf::Color::Black);
+		text_.setOutlineThickness(1);
 		text_.setCharacterSize(17);
 		text_.setPosition(
 			(x + getShape().getGlobalBounds().width / 2) - (text_.getGlobalBounds().width / 2),
-			(y + getShape().getGlobalBounds().height / 2) - (text_.getGlobalBounds().height / 2)
+			(y + getShape().getGlobalBounds().height / 2) - (text_.getGlobalBounds().height)
 		);
 	};
 

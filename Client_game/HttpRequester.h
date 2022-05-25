@@ -19,6 +19,7 @@ public:
 
     CURLcode getLastError();
     std::pair<std::string, int> GETrequest(const std::string& host, const std::string& URI);
+    std::pair<std::string, int> POSTrequest(const std::string& host, const std::string& URI);// const std::string& fields);
 
 private:
 
