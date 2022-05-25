@@ -8,8 +8,10 @@ void DataLoadScreen::show(sf::RenderWindow& window, int* state){
     sf::Clock clock;
     sf::String textString = "Loading files";
     sf::Text text;
+    text.setOutlineThickness(1.f);
+    text.setOutlineColor(sf::Color::Black);
     text.setFont(font);
-    text.setCharacterSize(18);
+    text.setCharacterSize(30);
 
     size_t k{ 0 };
     while (window.isOpen() && *state == 0) {
@@ -46,7 +48,7 @@ void DataLoadScreen::show(sf::RenderWindow& window, int* state){
 
 
         text.setPosition(sf::Vector2f(window.getSize()) / 2.f - sf::Vector2f(text.getGlobalBounds().width, text.getGlobalBounds().height) / 2.f);
-        window.clear();
+        window.clear(sf::Color(106, 116, 58));
         window.draw(text);
         window.display();
     }

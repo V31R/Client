@@ -24,7 +24,63 @@ private:
     std::string imageName_;
     int type_;
 
-}; 
+};
+
+#include "Button.h"
+#include "InputWindow.h"
+
+void loginScreen(sf::RenderWindow & window) {
+
+    sf::Font font{};
+    font.loadFromFile("fonts/consola.ttf");
+    //106 116 58
+    //75 82 41
+    sf::Vector2f winSize(400, 80);
+    InputWindow inputWindow{ font };
+    inputWindow.setTextColor(sf::Color::White);
+    inputWindow.setTextOutlineThickness(1.f);
+    inputWindow.setTextOutlineColor(sf::Color::Black);
+    inputWindow.setFrameColor(sf::Color(75, 82, 41));
+    inputWindow.setFrameSize(winSize);
+    inputWindow.setFrameOutlineThickness(4.f);
+    inputWindow.setFrameOutlineColor(sf::Color::Black);
+    inputWindow.setCharacterSize(34);
+    inputWindow.setPosition(sf::Vector2f(window.getSize()) / 2.f-winSize/2.f);
+
+    while (window.isOpen())
+    {
+
+        sf::Event event;
+        sf::Vector2i pixelPosition = sf::Mouse::getPosition(window);
+        sf::Vector2f mousePosition = window.mapPixelToCoords(pixelPosition);
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+
+            if (inputWindow.isFocusedCheck(event, mousePosition)) {
+
+                inputWindow.updateByEvent(event);
+
+                if (inputWindow.isEnterPressed()) {
+
+                    inputWindow.lostFocus();
+
+                }
+
+            }
+        }
+
+        inputWindow.update();
+
+        window.clear(sf::Color(106, 116, 58));
+
+        window.draw(inputWindow);
+        window.display();
+
+    }
+
+}
 
 
 int main(){
@@ -41,7 +97,7 @@ int main(){
    
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Yellow);
-    sf::RenderWindow window(sf::VideoMode(400, 400), "Client");
+    sf::RenderWindow window(sf::VideoMode(800, 800), "Client");
     //auto [result, code] {HttpRequester::getInstance().GETrequest(RequestInformer::getInstance().getHost(), "/auth?ip=" + RequestInformer::getInstance().getClientIp())};
 
     int registered{ 0 };
@@ -86,6 +142,8 @@ int main(){
     }
 
     
+    loginScreen(window);
+
     while (window.isOpen())
     {
         
