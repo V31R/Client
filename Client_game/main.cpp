@@ -7,12 +7,14 @@
 #include "SettingsProfileLoader.h"
 #include "Logger.h"
 #include <iostream>
+#include "ConnectionLoader.h"
+#include "ConnectionScreen.h"
+#include "ScreenWithLoader.h"
 
 class Entity {
 public:
 
     enum Type{ OBJECT, SWORD, SPEAR, BOW, MAGIC };
-
 
 
 private:
@@ -22,45 +24,46 @@ private:
 
 }; 
 
-class Screen1{
-public:
-
-    virtual void show(sf::RenderWindow& window) = 0;
-
-};
-
-class Loader1 {
-public:
-
-    virtual void load() = 0;
-
-};
-
-class ScreenWithLoad1 {
-public:
-
-    void run();
-
-};
 
 int main(){
 
-    HttpRequester::getInstance().init();
-    RequestInformer::getInstance().init();
     SettingsProfile settingsProfile{ SettingsProfileLoader::load() };
-
 
     Logger::getInstance()->setLevel(settingsProfile.getLogLevel());
     Logger::getInstance()->info("Settings were load successfully");
+
+    HttpRequester::getInstance().init();
+    RequestInformer::getInstance().init();
 
     RequestInformer::getInstance().setHost(settingsProfile.getIp(), settingsProfile.getPort());
    
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Yellow);
+    sf::RenderWindow window(sf::VideoMode(400, 400), "Client");
+    //auto [result, code] {HttpRequester::getInstance().GETrequest(RequestInformer::getInstance().getHost(), "/auth?ip=" + RequestInformer::getInstance().getClientIp())};
 
-    std::string res = HttpRequester::getInstance().GETrequest(RequestInformer::getInstance().getHost(), "/auth?ip=" + RequestInformer::getInstance().getClientIp());
+    int registered{ 0 };
+    {
 
-    sf::RenderWindow window(sf::VideoMode(200, 200), "Client");
+        Loader * loader = new ConnectionLoader;
+        Screen * screen = new ConnectionScreen;
+
+        ScreenWithLoader loginCheck(screen, loader);
+        loginCheck.run(window);
+
+        registered = reinterpret_cast<ConnectionLoader*>(loader)->getRegistered();
+        if (registered == 2) {
+
+            return 0;
+
+        }
+
+        delete loader;
+        delete screen;
+
+    }
+
+    
     while (window.isOpen())
     {
         

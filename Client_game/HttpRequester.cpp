@@ -61,14 +61,14 @@ CURLcode HttpRequester::getLastError(){
 
 }
 
-std::string HttpRequester::GETrequest(const std::string& host, const std::string& URI){
+std::pair<std::string, int> HttpRequester::GETrequest(const std::string& host, const std::string& URI){
 
     std::string result;
     CURL* curl_ =  curl_easy_init();
     if (!curl_) {
 
         Logger::getInstance()->error("CURL init error");
-        return result;
+        return { result, -1 };
 
     }
 
@@ -92,13 +92,19 @@ std::string HttpRequester::GETrequest(const std::string& host, const std::string
 
        Logger::getInstance()->error(error);
 
+       return {result, lastErrorCode_};
+
     }
-    std::string success{ "Request to " + url + " successfull, code: " };
-    std::ostringstream oss;
-    oss << responseCode;
-    Logger::getInstance()->info(success + oss.str());
+    else {
 
-    return result;
+        std::string success{ "Request to " + url + " successfull, code: " };
+        std::ostringstream oss;
+        oss << responseCode;
+        Logger::getInstance()->info(success + oss.str());
 
+        return { result, responseCode };
+
+    }
+    
 }
 

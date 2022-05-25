@@ -6,6 +6,7 @@
 #include <curl/curl.h>
 #include <string>
 #include <mutex>
+#include <utility>
 
 class HttpRequester{
 public:
@@ -17,7 +18,7 @@ public:
     void clean();
 
     CURLcode getLastError();
-    std::string GETrequest(const std::string& host, const std::string& URI);
+    std::pair<std::string, int> GETrequest(const std::string& host, const std::string& URI);
 
 private:
 

@@ -1,9 +1,9 @@
-#include "LoadScreen.h"
+#include "ConnectionScreen.h"
 
 void ConnectionScreen::show(sf::RenderWindow& window, int* state){
 
     sf::Font font;
-    font.loadFromFile("consola.ttf");
+    font.loadFromFile("fonts/consola.ttf");
 
     sf::Clock clock;
     sf::String textString = "Connection to server";
@@ -12,18 +12,21 @@ void ConnectionScreen::show(sf::RenderWindow& window, int* state){
     text.setCharacterSize(18);
     
     size_t k{ 0 };
-    while (window.isOpen()){
+    while (window.isOpen() && *state == 0){
 
         if (clock.getElapsedTime().asMilliseconds() > 800) {
 
-
             if (k >= 3) {
+
                 k=0;
             }
             else {
+
                 k++;
 
             }
+
+            clock.restart();
            
         }
         sf::Event event;
