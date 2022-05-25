@@ -22,6 +22,27 @@ private:
 
 }; 
 
+class Screen1{
+public:
+
+    virtual void show(sf::RenderWindow& window) = 0;
+
+};
+
+class Loader1 {
+public:
+
+    virtual void load() = 0;
+
+};
+
+class ScreenWithLoad1 {
+public:
+
+    void run();
+
+};
+
 int main(){
 
     HttpRequester::getInstance().init();
