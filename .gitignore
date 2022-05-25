@@ -4,6 +4,7 @@
 *.settings
 x64
 *.sln
+Client_game/images
 Client_game/x64
 Client_game/Debug
 Debug
