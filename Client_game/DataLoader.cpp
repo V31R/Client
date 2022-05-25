@@ -74,7 +74,7 @@ void DataLoader::load(int* state){
 
                     std::ofstream image;
                     image.open("images/" + imageName);
-                    image << result_;
+                    image.write(result_.c_str(), result_.size());
                     image.close();
 
                 }
